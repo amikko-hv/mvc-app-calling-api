@@ -1,8 +1,30 @@
-﻿@{
+﻿@model IList<WeatherForecast>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4">Weather WebAPI Demo</h1>
+    </div>
+
+    <div class="row">
+        @foreach (var weatherData in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">@weatherData.Date.ToString("MMMM dd, yyyy")</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><strong>Celsius:</strong> @weatherData.TemperatureC°C</li>
+                            <li><strong>Fahrenheit:</strong> @weatherData.TemperatureF°F</li>
+                            <li><strong>Summary:</strong> @weatherData.Summary</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

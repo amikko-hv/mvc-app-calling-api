@@ -15,7 +15,35 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        List<WeatherForecast> weatherForecasts = new List<WeatherForecast>();
+        
+        // Test code: Weather data
+        weatherForecasts.Add(new WeatherForecast()
+        {
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            TemperatureC = 5,
+            Summary = "Cloudy"
+        });
+        weatherForecasts.Add(new WeatherForecast()
+        {
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            TemperatureC = 25,
+            Summary = "Sunny"
+        });
+        weatherForecasts.Add(new WeatherForecast()
+        {
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            TemperatureC = 5,
+            Summary = "Cloudy"
+        });
+        weatherForecasts.Add(new WeatherForecast()
+        {
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            TemperatureC = 25,
+            Summary = "Sunny"
+        });
+        
+        return View(weatherForecasts);
     }
 
     public IActionResult Privacy()
