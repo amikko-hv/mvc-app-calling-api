@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using mvc_app_calling_api.Models;
 
@@ -13,36 +14,36 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        List<WeatherForecast> weatherForecasts = new List<WeatherForecast>();
+        // A list to hold the weather forecast data
+        List<WeatherForecast>? weatherForecasts = null;
         
-        // Test code: Weather data
-        weatherForecasts.Add(new WeatherForecast()
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            TemperatureC = 5,
-            Summary = "Cloudy"
-        });
-        weatherForecasts.Add(new WeatherForecast()
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            TemperatureC = 25,
-            Summary = "Sunny"
-        });
-        weatherForecasts.Add(new WeatherForecast()
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            TemperatureC = 5,
-            Summary = "Cloudy"
-        });
-        weatherForecasts.Add(new WeatherForecast()
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            TemperatureC = 25,
-            Summary = "Sunny"
-        });
+        // A http client to send request with
+        var client = new HttpClient();
         
+        // Create a http request. Change the URI to match your localhost.
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri("http://localhost:5191/WeatherForecast"),
+        };
+
+        try
+        {
+            // Send request to the API and read the json response to our List
+            using (var response = await client.SendAsync(request))
+            {
+                weatherForecasts = await response.Content.ReadFromJsonAsync<List<WeatherForecast>>();
+            }
+        }
+        catch (Exception e)
+        {
+            // Errors could happen. For example, API is not available
+            _logger.LogError(e.Message);
+        }
+        
+        // Send the result to the View for rendering
         return View(weatherForecasts);
     }
 
